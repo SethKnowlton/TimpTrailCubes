@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>timp — Natural Protein Granola Cubes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F4EBDD;
+    --cream-soft:#FCF7EE;
+    --ink:#2F221D;
+    --stone:#6E584C;
+    --plum:#5B3551;
+    --plum-deep:#41253D;
+    --terracotta:#C86A3B;
+    --terracotta-deep:#A14E2D;
+    --line:rgba(47,34,29,0.14);
+    --shadow:rgba(65,37,61,0.16);
+    --max:1180px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{
+    font-family:'Archivo Black', sans-serif;
+    margin:0 0 0.5em 0;
+    line-height:0.95;
+    letter-spacing:-0.03em;
+    text-transform:uppercase;
+  }
+  p{margin:0 0 1em 0;}
+  a{color:inherit;text-decoration:none;}
+  ul{margin:0;padding:0;list-style:none;}
+  img,svg{display:block;max-width:100%;}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 32px;}
+
+  a:focus-visible, button:focus-visible, input:focus-visible{
+    outline:3px solid var(--plum);
+    outline-offset:3px;
+  }
+
+  .page-transition{
+    position:fixed;inset:0;z-index:1000;pointer-events:none;
+    background:linear-gradient(135deg, rgba(245,239,228,0.96), rgba(251,247,239,0.98));
+    opacity:0;
+    transition:opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .page-transition.is-active{opacity:1;pointer-events:auto;}
+
+  .eyebrow{
+    font-family:'Archivo Black', sans-serif;
+    font-weight:400;
+    font-size:0.78rem;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--terracotta-deep);
+    margin:0 0 0.9em 0;
+  }
+  .eyebrow.center{text-align:center;}
+
+  .wordmark{
+    font-family:'Archivo Black', sans-serif;
+    font-size:1.5rem;
+    letter-spacing:0.02em;
+    color:var(--cream-soft);
+    text-shadow:3px 3px 0 var(--plum);
+    display:inline-block;
+  }
+  .wordmark.small{
+    font-size:1.1rem;
+    text-shadow:2px 2px 0 var(--plum);
+    color:var(--cream-soft);
+  }
+  .logo-link{
+    display:inline-flex;
+    align-items:center;
+    background:transparent;
+  }
+  .site-logo{
+    height:88px;
+    width:auto;
+    display:block;
+    background:transparent;
+    object-fit:contain;
+  }
+
+  /* NAV */
+  .nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(244,235,221,0.94);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:var(--max);margin:0 auto;padding:16px 32px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .nav-links{display:flex;align-items:center;gap:28px;}
+  .nav-links > li{position:relative;list-style:none;}
+  .nav-links a,
+  .nav-links button{
+    font-family:'Archivo Black', sans-serif;
+    font-size:0.84rem;
+    font-weight:400;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--ink);
+    padding:6px 2px;border-bottom:2px solid transparent;
+    transition:border-color 0.2s ease;
+    background:none;border:none;cursor:pointer;
+  }
+  .nav-links a:hover,
+  .nav-links > li:hover > button{border-color:var(--terracotta);}
+  .nav-dropdown{
+    position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%);
+    background:var(--cream-soft);border:1px solid var(--line);border-radius:14px;
+    padding:10px 12px;display:flex;flex-direction:column;gap:8px;min-width:180px;
+    box-shadow:0 14px 30px -18px var(--shadow);opacity:0;visibility:hidden;transition:opacity 0.2s ease, visibility 0.2s ease;
+  }
+  .nav-links > li:hover .nav-dropdown,
+  .nav-links > li:focus-within .nav-dropdown{opacity:1;visibility:visible;}
+  .nav-dropdown a{display:block;padding:6px 8px;border-radius:8px;font-size:0.76rem;letter-spacing:0.06em;white-space:nowrap;}
+  .nav-dropdown a:hover{background:rgba(200,106,59,0.12);border-color:transparent;}
+  .nav-cta{
+    background:linear-gradient(135deg, var(--terracotta) 0%, var(--terracotta-deep) 100%);
+    color:var(--cream-soft) !important;
+    padding:9px 18px !important;
+    border-radius:999px;
+    border-bottom:none !important;
+    font-weight:600 !important;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .nav-cta:hover{background:var(--plum-deep);}
+  .nav-toggle{
+    display:none;background:none;border:none;font-size:1.4rem;
+    cursor:pointer;color:var(--ink);
+  }
+
+  /* HERO */
+  .hero{padding:72px 0 40px;}
+  .hero-inner{
+    max-width:var(--max);margin:0 auto;padding:0 32px;
+    display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center;
+  }
+  .hero h1{
+    font-size:clamp(2.4rem, 5vw, 3.6rem);
+    font-weight:700;
+    color:var(--ink);
+  }
+  .hero-sub{
+    font-size:1.08rem;color:var(--stone);max-width:46ch;
+  }
+  .hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px;}
+  .btn{
+    display:inline-block;padding:13px 26px;border-radius:999px;
+    font-family:'Archivo Black', sans-serif;
+    font-weight:400;
+    font-size:0.9rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    transition:transform 0.15s ease, background 0.2s ease;
+    border:2px solid transparent;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn-primary{background:linear-gradient(135deg, var(--terracotta) 0%, var(--terracotta-deep) 100%);color:var(--cream-soft);}
+  .btn-primary:hover{background:var(--plum-deep);}
+  .btn-ghost{border-color:var(--ink);color:var(--ink);}
+  .btn-ghost:hover{border-color:var(--plum);color:var(--plum);}
+
+  .hero-visual{position:relative;}
+  #mountain-svg{width:100%;height:auto;}
+
+  /* STATS STRIP */
+  .stats-strip{
+    background:var(--ink);color:var(--cream-soft);
+    padding:34px 0;margin-top:20px;
+  }
+  .stats-strip .wrap{
+    display:flex;justify-content:space-around;flex-wrap:wrap;gap:24px;text-align:center;
+  }
+  .stat-num{
+    display:block;font-family:'Space Grotesk',sans-serif;font-weight:700;
+    font-size:2.1rem;color:var(--cream-soft);
+  }
+  .stat-label{
+    display:block;font-size:0.82rem;letter-spacing:0.06em;
+    text-transform:uppercase;color:#C9BFB2;margin-top:4px;
+  }
+
+  /* SECTION SPACING */
+  .flavors, .philosophy, .story, .newsletter{padding:96px 0;}
+  .section-title{
+    font-size:clamp(1.8rem,3.4vw,2.5rem);
+    max-width:18ch;margin-left:auto;margin-right:auto;
+  }
+  .section-title.center{text-align:center;}
+
+  /* FLAVORS */
+  .flavor-grid{
+    margin-top:52px;
+    display:grid;
+    grid-template-columns:repeat(2, minmax(240px, 320px));
+    gap:22px;
+    justify-content:center;
+    align-items:stretch;
+  }
+  .flavor-card{
+    background:linear-gradient(145deg, var(--cream-soft), #f3e7d5);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:28px 20px 26px;
+    text-align:center;
+    transition:transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .flavor-card:hover{
+    transform:translateY(-6px) rotate(-0.4deg);
+    box-shadow:0 18px 30px -18px var(--shadow);
+  }
+  .flavor-card h3{
+    font-size:1.02rem;margin-bottom:8px;color:var(--ink);
+  }
+  .flavor-card p{
+    font-size:0.86rem;color:var(--stone);margin:0;
+  }
+  .iso-cube{width:52px;height:60px;position:relative;margin:0 auto 20px;}
+  .iso-cube i{position:absolute;display:block;background:var(--accent);}
+  .iso-cube .top{
+    width:52px;height:30px;top:0;left:0;
+    clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);
+    filter:brightness(1.35) saturate(0.85);
+  }
+  .iso-cube .left{
+    width:26px;height:38px;top:22px;left:0;
+    clip-path:polygon(0 15%,100% 0,100% 100%,0 85%);
+    filter:brightness(0.9);
+  }
+  .iso-cube .right{
+    width:26px;height:38px;top:22px;left:26px;
+    clip-path:polygon(0 0,100% 15%,100% 85%,0 100%);
+    filter:brightness(0.65);
+  }
+
+  /* PHILOSOPHY */
+  .philosophy{background:var(--cream-soft);}
+  .philosophy-inner{
+    max-width:var(--max);margin:0 auto;padding:0 32px;
+    display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start;
+  }
+  .philosophy-copy p{color:var(--stone);font-size:1.05rem;max-width:42ch;}
+  .philosophy-list li{
+    padding:18px 0;border-top:1px solid var(--line);
+    font-size:0.98rem;color:var(--stone);
+  }
+  .philosophy-list li:last-child{border-bottom:1px solid var(--line);}
+  .philosophy-list strong{color:var(--ink);font-weight:600;}
+
+  /* STORY */
+  .story{
+    background:linear-gradient(135deg, var(--plum) 0%, var(--plum-deep) 100%);
+    color:var(--cream-soft);
+  }
+  .story-inner{max-width:760px;margin:0 auto;padding:0 32px;text-align:center;}
+  .story .eyebrow{color:#E3C9C0;}
+  .story h2{color:var(--cream-soft);}
+  .story p{color:#E9DFE6;font-size:1.05rem;max-width:60ch;margin:0 auto;}
+  .story-peak{width:220px;margin:0 auto 30px;opacity:0.85;}
+  .story-peak polyline{fill:none;stroke:var(--terracotta);stroke-width:3;stroke-linejoin:round;stroke-linecap:round;}
+
+  /* NEWSLETTER */
+  .newsletter-inner{max-width:600px;margin:0 auto;padding:0 32px;text-align:center;}
+  .newsletter p{color:var(--stone);}
+  #notify-form{
+    display:flex;gap:10px;margin-top:24px;flex-wrap:wrap;justify-content:center;
+  }
+  #notify-form input{
+    flex:1;min-width:220px;padding:13px 18px;border-radius:999px;
+    border:1px solid var(--line);background:var(--cream-soft);
+    font-family:inherit;font-size:0.96rem;color:var(--ink);
+  }
+  .form-success{
+    margin-top:16px;color:var(--terracotta-deep);font-weight:600;
+  }
+
+  /* FOOTER */
+  .footer{background:var(--ink);color:#C9BFB2;padding:44px 0;}
+  .footer-inner{
+    max-width:var(--max);margin:0 auto;padding:0 32px;
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:18px;
+  }
+  .footer-inner p{margin:0;font-size:0.85rem;}
+  .footer-links{display:flex;gap:20px;}
+  .footer-links a{font-size:0.85rem;}
+  .footer-links a:hover{color:var(--cream-soft);}
+
+  /* REVEAL */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity 0.7s ease, transform 0.7s ease;}
+  .reveal.is-visible{opacity:1;transform:none;}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    .reveal{opacity:1;transform:none;transition:none;}
+    .btn:hover{transform:none;}
+  }
+
+  /* RESPONSIVE */
+  @media (max-width:980px){
+    .hero-inner{grid-template-columns:1fr;}
+    .hero-visual{order:-1;max-width:380px;margin:0 auto;}
+    .philosophy-inner{grid-template-columns:1fr;}
+    .flavor-grid{grid-template-columns:repeat(3,1fr);}
+  }
+  @media (max-width:720px){
+    .nav-links{
+      position:absolute;top:100%;left:0;right:0;
+      background:var(--cream);flex-direction:column;align-items:flex-start;
+      padding:18px 32px 26px;border-bottom:1px solid var(--line);
+      display:none;gap:16px;
+    }
+    .nav-links.open{display:flex;}
+    .nav-toggle{display:block;}
+    .flavor-grid{grid-template-columns:repeat(2,1fr);}
+    .stats-strip .wrap{gap:30px;}
+  }
+  @media (max-width:480px){
+    .flavor-grid{grid-template-columns:1fr;}
+    .wrap{padding:0 20px;}
+    .hero-inner, .philosophy-inner, .story-inner, .newsletter-inner, .nav-inner, .footer-inner{padding-left:20px;padding-right:20px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo-link" aria-label="TIMP home">
+      <img src="assets/images/gallery/LogoWithBack.jpg" alt="TIMP logo" class="site-logo">
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+    <ul class="nav-links" id="navLinks">
+      <li>
+        <button type="button" aria-label="Flavors menu">Flavors</button>
+        <div class="nav-dropdown">
+          <a href="trailhead.html">Trailhead</a>
+          <a href="coming-soon.html">Coming Soon</a>
+        </div>
+      </li>
+      <li><a href="philosophy.html">Philosophy</a></li>
+      <li><a href="early-access.html" class="nav-cta">Get Early Access</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <p class="eyebrow">Born in the Wasatch · Salt Lake City, UT</p>
+      <h1>Granola,<br>built like<br>a mountain.</h1>
+      <p class="hero-sub">Whole-food protein, adventurous natural flavor, and a shape that doesn't apologize for being different. 10g of protein a cube, six ingredients or fewer.</p>
+      <div class="hero-actions">
+        <a href="#notify" class="btn btn-primary">Get Early Access</a>
+        <a href="#flavors" class="btn btn-ghost">See the Flavors</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <svg id="mountain-svg" viewBox="0 0 460 340" aria-hidden="true"></svg>
+    </div>
+  </div>
+</header>
+
+<section class="stats-strip">
+  <div class="wrap">
+    <div class="stat"><span class="stat-num">10g</span><span class="stat-label">Protein per cube</span></div>
+    <div class="stat"><span class="stat-num">≤6</span><span class="stat-label">Ingredients per flavor</span></div>
+    <div class="stat"><span class="stat-num">0</span><span class="stat-label">Isolates or extracts</span></div>
+  </div>
+</section>
+
+<section class="flavors" id="flavors">
+  <div class="wrap">
+    <p class="eyebrow center reveal">The Lineup</p>
+    <h2 class="section-title center reveal">Two flavors, zero shortcuts.</h2>
+    <div class="flavor-grid">
+      <article class="flavor-card reveal" style="--accent:#B47B84">
+        <a href="trailhead.html" style="display:block;color:inherit;text-decoration:none;">
+          <div class="iso-cube"><i class="top"></i><i class="left"></i><i class="right"></i></div>
+          <h3>Trailhead</h3>
+          <p>A bold first release built for the trail and the everyday grind.</p>
+        </a>
+      </article>
+      <article class="flavor-card reveal" style="--accent:#6F6BA3">
+        <a href="coming-soon.html" style="display:block;color:inherit;text-decoration:none;">
+          <div class="iso-cube"><i class="top"></i><i class="left"></i><i class="right"></i></div>
+          <h3>coming soon</h3>
+          <p>The next flavor is on the way.</p>
+        </a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="philosophy" id="philosophy">
+  <div class="philosophy-inner">
+    <div class="philosophy-copy reveal">
+      <p class="eyebrow">Why Natural</p>
+      <h2>If we can't picture it growing, it doesn't go in the bag.</h2>
+      <p>Most "natural" snacks lean on flavor labs to fake a taste. We build ours from the real thing — whole nuts, real spice, actual fruit — even when it costs more and lasts less time on a shelf.</p>
+    </div>
+    <ul class="philosophy-list reveal">
+      <li><strong>Whole-food protein.</strong> Nuts, seeds, and nut butters — never isolates or powders.</li>
+      <li><strong>Short lists, on purpose.</strong> Most flavors use six ingredients or fewer.</li>
+      <li><strong>Real spice, real flavor.</strong> Cardamom, rosewater, tahini — not lab-built extracts.</li>
+      <li><strong>Built to hold up.</strong> Naturally binding ingredients, no gums or fillers.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="story" id="story">
+  <div class="story-inner reveal">
+    <svg class="story-peak" viewBox="0 0 200 80" aria-hidden="true">
+      <polyline points="0,80 38,28 68,50 102,8 138,46 172,22 200,80" />
+    </svg>
+    <p class="eyebrow">The Name</p>
+    <h2>Timpanogos, at first light.</h2>
+    <p>Every clear morning in the Wasatch Range, the sun catches Mount Timpanogos before it reaches the valley floor — the ridgeline turning shades of plum and rose while the base stays shadowed stone. That's the color story behind timp: alpenglow purple, canyon clay, and the cream of first light on snow. We named the company after the mountain because it's the thing we're looking at every morning while we figure out what goes in the next batch.</p>
+  </div>
+</section>
+
+<section class="newsletter" id="notify">
+  <div class="newsletter-inner reveal">
+    <h2>Be first on the trail.</h2>
+    <p>We're baking small batches around Salt Lake City right now. Leave your email and we'll let you know when timp is ready to ship.</p>
+    <form id="notify-form">
+      <input type="email" required placeholder="you@example.com" aria-label="Email address" id="notify-email">
+      <button type="submit" class="btn btn-primary">Notify Me</button>
+    </form>
+    <p class="form-success" id="formSuccess" hidden>You're on the list — we'll be in touch.</p>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span class="wordmark small">TIMP</span>
+    <p>&copy; 2026 timp foods. Made in the Wasatch.</p>
+    <div class="footer-links">
+      <a href="#flavors">Flavors</a>
+      <a href="#philosophy">Philosophy</a>
+      <a href="#story">Story</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ---- Mountain of cubes (signature visual) ----
+  (function(){
+    const svg = document.getElementById('mountain-svg');
+    const NS = 'http://www.w3.org/2000/svg';
+    const heights = [2,4,3,6,9,7,5,8,4,2];
+    const colW = 42, cubeW = 40, cubeStepY = 40;
+    const baseY = 300;
+    const maxH = Math.max(...heights);
+
+    function hexToRgb(hex){
+      const h = hex.replace('#','');
+      return [parseInt(h.substring(0,2),16), parseInt(h.substring(2,4),16), parseInt(h.substring(4,6),16)];
+    }
+    function rgbToHex(r,g,b){
+      return '#' + [r,g,b].map(v=>Math.max(0,Math.min(255,Math.round(v))).toString(16).padStart(2,'0')).join('');
+    }
+    function mix(hex1, hex2, t){
+      const a = hexToRgb(hex1), b = hexToRgb(hex2);
+      return rgbToHex(a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t, a[2]+(b[2]-a[2])*t);
+    }
+    function shade(hex, amt){
+      return amt >= 0 ? mix(hex, '#FBF7EF', amt) : mix(hex, '#2B2320', -amt);
+    }
+
+    const terracotta = '#C1613D';
+    const plum = '#5C3A5C';
+
+    let idx = 0;
+    heights.forEach((h, col) => {
+      const x = col * colW + 10;
+      for(let r = 0; r < h; r++){
+        const y = baseY - r * cubeStepY - cubeW * 1.5; // offset so tallest cubes fit viewBox
+        const t = maxH > 1 ? r / (maxH - 1) : 0;
+        const base = mix(terracotta, plum, t);
+        const top = shade(base, 0.4);
+        const left = base;
+        const right = shade(base, -0.35);
+
+        const topPts = `${x+20},${y} ${x+40},${y+11.5} ${x+20},${y+23} ${x},${y+11.5}`;
+        const leftPts = `${x},${y+11.5} ${x+20},${y+23} ${x+20},${y+63} ${x},${y+51.5}`;
+        const rightPts = `${x+40},${y+11.5} ${x+20},${y+23} ${x+20},${y+63} ${x+40},${y+51.5}`;
+
+        [[topPts, top], [leftPts, left], [rightPts, right]].forEach(([pts, fill]) => {
+          const poly = document.createElementNS(NS, 'polygon');
+          poly.setAttribute('points', pts);
+          poly.setAttribute('fill', fill);
+          poly.setAttribute('stroke', '#F5EFE4');
+          poly.setAttribute('stroke-width', '1.4');
+          poly.style.opacity = '0';
+          poly.style.transition = 'opacity 0.5s ease';
+          poly.style.transitionDelay = (idx * 14) + 'ms';
+          svg.appendChild(poly);
+          requestAnimationFrame(()=> requestAnimationFrame(()=>{ poly.style.opacity = '1'; }));
+        });
+        idx++;
+      }
+    });
+  })();
+
+  // ---- Reduced motion check ----
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---- Scroll reveal ----
+  const revealEls = document.querySelectorAll('.reveal');
+  if(prefersReduced){
+    revealEls.forEach(el => el.classList.add('is-visible'));
+  } else {
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, {threshold:0.15});
+    revealEls.forEach(el => io.observe(el));
+  }
+
+  // ---- Mobile nav ----
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', ()=>{
+    const open = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+
+  // ---- Notify form ----
+  const form = document.getElementById('notify-form');
+  const success = document.getElementById('formSuccess');
+  form.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    form.hidden = true;
+    success.hidden = false;
+  });
+</script>
+<script>
+  (function(){
+    const overlay = document.createElement('div');
+    overlay.className = 'page-transition';
+    document.body.appendChild(overlay);
+    const transitionKey = 'timpPageTransition';
+
+    if (sessionStorage.getItem(transitionKey) === '1') {
+      overlay.classList.add('is-active');
+      sessionStorage.removeItem(transitionKey);
+      window.setTimeout(() => overlay.classList.remove('is-active'), 360);
+    }
+
+    document.querySelectorAll('a[href]').forEach((link) => {
+      const href = link.getAttribute('href');
+      if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:') || /^https?:\/\//i.test(href)) return;
+      const targetPath = href.split('#')[0];
+      if (!targetPath || targetPath === window.location.pathname.split('/').pop()) return;
+      link.addEventListener('click', (event) => {
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        sessionStorage.setItem(transitionKey, '1');
+        overlay.classList.add('is-active');
+        window.location.href = href;
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>
